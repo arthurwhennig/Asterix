@@ -1,0 +1,52 @@
+Asterix - An asteroid visualisation tool
+
+Asterix is a web application that allows you to simulate real or fictional asteroids and their impacts on earth. It also includes a game mode to protect Earth from asteroids.
+
+Features:
+- Interactive 3D visualisation of Earth
+- Historical asteroid data
+- Real-time asteroid tracking
+- Real-world asteroid case studies
+
+- Simulation mode:
+    - Fictional asteroid creation
+    - Impact visualisation (e.g. craters, fires)
+    - Data and time Slider
+
+- Single-player game mode to protect Earth from asteroids:
+    - Sound effects
+    - Visual effects
+    - Gravity tractors and shields
+    - Kinetic impactors
+    - Score system
+    - Difficulty levels
+
+- Health checks and metrics
+- Error tracking and logging
+
+- User accounts for saving simulations and game progress
+- Leaderboard for the game mode
+
+
+- Technologies:
+    - Deployment: Docker and Docker Compose
+    - PostgreSQL for the database
+    - Cesium.js for 3D Earth visualisation
+    - Next.js for the web application
+    - Tailwind CSS for styling
+    - FastAPI (Python) for the backend + API
+    - GitHub for version control
+    - Redis for caching
+
+Used APIs:
+    - NASA JPL asteroid data
+    - NASA NEO data
+
+
+Project Structure:
+
+/frontend - Frontend files
+/backend - Backend files
+/database - Database files
+/deployment - Deployment files (Docker, Docker-Compose)
+/docs - Documentation files

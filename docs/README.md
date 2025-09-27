@@ -1,0 +1,158 @@
+# Asterix - Asteroid Visualization Tool
+
+Asterix is a web application that allows you to simulate real or fictional asteroids and their impacts on Earth. It also includes a game mode to protect Earth from asteroids.
+
+## Features
+
+- Interactive 3D visualization of Earth using Cesium.js
+- Historical asteroid data from NASA APIs
+- Real-time asteroid tracking
+- Real-world asteroid case studies
+- Simulation mode with fictional asteroid creation
+- Impact visualization (craters, fires)
+- Data and time sliders
+- Single-player game mode to protect Earth from asteroids
+- Sound effects and visual effects
+- Gravity tractors, shields, and kinetic impactors
+- Score system with difficulty levels
+- User accounts for saving simulations and game progress
+- Leaderboard for the game mode
+- Health checks and metrics
+- Error tracking and logging
+
+## Technologies
+
+- **Frontend**: Next.js with TypeScript, Tailwind CSS, Cesium.js
+- **Backend**: FastAPI (Python)
+- **Database**: PostgreSQL
+- **Cache**: Redis
+- **Deployment**: Docker and Docker Compose
+- **Version Control**: GitHub
+
+## Project Structure
+
+```
+/Users/ahennig/Desktop/Asterix/
+├── frontend/          # Next.js frontend application
+├── backend/           # FastAPI backend application
+├── database/          # Database schema and migrations
+├── deployment/        # Docker and deployment configurations
+├── docs/             # Documentation files
+└── documentation.txt # Project overview
+```
+
+## Getting Started
+
+### Prerequisites
+
+- Docker and Docker Compose
+- Node.js (for local development)
+- Python 3.11+ (for local development)
+
+### Environment Setup
+
+1. Copy the environment example file:
+
+   ```bash
+   cp env.example .env
+   ```
+
+2. Update the `.env` file with your configuration:
+   - Set your NASA API key (get one from https://api.nasa.gov/)
+   - Update database credentials if needed
+   - Set a secure secret key for JWT tokens
+
+### Running with Docker
+
+1. Start all services:
+
+   ```bash
+   cd deployment
+   docker-compose up -d
+   ```
+
+2. Access the application:
+   - Frontend: http://localhost:3000
+   - Backend API: http://localhost:8000
+   - API Documentation: http://localhost:8000/docs
+
+### Local Development
+
+#### Backend
+
+1. Navigate to the backend directory:
+
+   ```bash
+   cd backend
+   ```
+
+2. Create and activate virtual environment:
+
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
+
+3. Install dependencies:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. Run database migrations:
+
+   ```bash
+   alembic upgrade head
+   ```
+
+5. Start the development server:
+   ```bash
+   uvicorn main:app --reload
+   ```
+
+#### Frontend
+
+1. Navigate to the frontend directory:
+
+   ```bash
+   cd frontend
+   ```
+
+2. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+## API Documentation
+
+The API documentation is available at http://localhost:8000/docs when the backend is running.
+
+### Main Endpoints
+
+- `GET /` - API health check
+- `GET /health` - Health check endpoint
+- `POST /api/auth/register` - User registration
+- `POST /api/auth/login` - User login
+- `GET /api/asteroids/` - Get asteroid data
+- `POST /api/asteroids/sync-nasa` - Sync with NASA data
+- `GET /api/game/leaderboard` - Get game leaderboard
+- `POST /api/simulations/` - Create simulation
+
+## Database Schema
+
+The application uses PostgreSQL with the following main tables:
+
+- `users` - User accounts and authentication
+- `asteroids` - Asteroid data (real and fictional)
+- `games` - Game scores and statistics
+- `simulations` - User-created simulations
+
+## License
+
+This project is licensed under the MIT License.
