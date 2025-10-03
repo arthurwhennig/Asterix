@@ -30,7 +30,7 @@ This section allows the user to choose the threat object from two sources.
   - **Interaction**: Clicking an asteroid selects it for the simulation.
 
 
-## 3. Central 3D Viewport & Simulation Visuals
+## 2. Central 3D Viewport & Simulation Visuals
 
 The heart of the application, where the entire event unfolds.
 
@@ -44,7 +44,7 @@ The heart of the application, where the entire event unfolds.
 
 ---
 
-## 4. Right Sidebar: The Consequence Report
+## 3. Right Sidebar: The Consequence Report
 
 This panel is initially collapsed and expands upon impact to provide a detailed, multi-tabbed analysis of the consequences.
 
@@ -68,7 +68,7 @@ This panel is initially collapsed and expands upon impact to provide a detailed,
 
 ---
 
-## 5. Bottom Bar: Master Controls
+## 4. Bottom Bar: Master Controls
 
 Contains the primary controls for running and reviewing the simulation.
 
