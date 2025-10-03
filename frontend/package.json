@@ -7,7 +7,7 @@
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "eslint",
-    "postinstall": "cp -r node_modules/cesium/Build/Cesium public/cesium"
+    "postinstall": "xcopy node_modules\\cesium\\Build\\Cesium public\\cesium /E /I /Y"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.6",
