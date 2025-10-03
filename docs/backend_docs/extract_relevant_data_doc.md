@@ -3,31 +3,39 @@ This document provides a detailed, step-by-step guide for the automated extracti
 
 
 ## 1. Impactor Characteristics from NASA JPL
-    This data defines the asteroid's physical properties. It is retrieved via a real-time API call.
+    This data defines the asteroid's physical and kinematic properties. We now use the JPL Horizons API for time-specific kinematics (e.g., velocity at a given epoch) and the SBDB API for static physical parameters when available.
 ### WHAT to Extract:
     Impactor Diameter: The asteroid's mean diameter in meters (m).
-    Impactor Velocity: The asteroid's speed relative to Earth at closest approach, in meters per second (m/s).
-### HOW to Extract (Automated API Call):
-    - Identify Target Asteroid: Determine the official designation of the asteroid you are simulating (e.g., Apophis, Bennu).
-    - Construct API Request URL: Create a URL to query the JPL Small-Body Database (SBDB) API.
-        -Base URL: https://ssd-api.jpl.nasa.gov/sbdb.api
-        -Parameters:
-            -sstr: The name of the asteroid (e.g., sstr=Apophis).
-            -phys-par=1: A flag to request physical parameters.
-            -ca-data=1: A flag to request close-approach data.
-        -Example URL: https://ssd-api.jpl.nasa.gov/sbdb.api?sstr=Apophis&phys-par=1&ca-data=1
-    - Execute API Call:
-        - Use a standard HTTP library (e.g., requests in Python) to send a GET request to the constructed URL.
-    -Parse JSON Response: The API will return a JSON object. Your code must parse this object to find the required values.
-        - Diameter:
-            -Navigate to the phys_par object.
-            -Find the key "diameter". Its value is a string representing the diameter in kilometers.
-            -Action: Convert this string to a number and multiply by 1000 to get meters.
-        - Velocity:
-            -Navigate to the ca_data array.
-            -Find the object corresponding to the relevant close-approach date.
-            -Find the key "v_rel". Its value is a string representing the velocity in kilometers per second.
-            -Action: Convert this string to a number and multiply by 1000 to get meters per second.
+    Impactor Velocity (time-specific): The asteroid's speed at a requested epoch, in meters per second (m/s).
+### HOW to Extract (Automated API Calls):
+    - Identify Target Asteroid: Determine the official designation or numeric ID (e.g., "Apophis", "2000433").
+    - Physical Parameters (Diameter/Mass/Composition) — SBDB API:
+        - Base URL: https://ssd-api.jpl.nasa.gov/sbdb.api
+        - Parameters:
+            - sstr: The name/designation (e.g., sstr=Apophis)
+            - phys-par=1: Request physical parameters
+        - Example URL: https://ssd-api.jpl.nasa.gov/sbdb.api?sstr=Apophis&phys-par=1
+        - Parse JSON Response:
+            - Diameter: `phys_par.diameter` (km) → convert to meters
+            - Mass (if present): `phys_par.mass` (kg)
+            - Composition/class (if present): e.g., `phys_par.spec_B`
+    - Time-Specific Kinematics (Position/Velocity) — JPL Horizons API:
+        - Base URL: https://ssd.jpl.nasa.gov/api/horizons.api
+        - Parameters (query string):
+            - format=text
+            - COMMAND='ASTEROID_ID_OR_NAME' (e.g., '2000433')
+            - OBJ_DATA=YES
+            - MAKE_EPHEM=YES
+            - EPHEM_TYPE=VECTORS
+            - CENTER='500@0' (or desired center)
+            - START_TIME='YYYY-MM-DD'
+            - STOP_TIME='YYYY-MM-DD'
+            - STEP_SIZE='1d' (or desired cadence)
+        - Example URL: https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND='2000433'&OBJ_DATA=YES&MAKE_EPHEM=YES&EPHEM_TYPE=VECTORS&CENTER='500@0'&START_TIME='2025-01-01'&STOP_TIME='2025-01-10'&STEP_SIZE='1d'
+        - Parse Text Response:
+            - Extract the ephemeris block between `$$SOE` and `$$EOE`
+            - For each line, read position (X,Y,Z km) and velocity (VX,VY,VZ km/s)
+            - Compute velocity magnitude and convert km/s → m/s as needed
 
 
 ## 2. Topography (Elevation) from NASA CMR
