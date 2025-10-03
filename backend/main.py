@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 
 from database.database import get_db
 from database.models import User, Asteroid, Game
-from api.routes import auth, asteroids, games, simulations
+from api.routes import auth, asteroids, games, simulations, data_extraction
 
 load_dotenv()
 
@@ -40,6 +40,7 @@ app.include_router(auth.router, prefix="/api/auth", tags=["authentication"])
 app.include_router(asteroids.router, prefix="/api/asteroids", tags=["asteroids"])
 app.include_router(games.router, prefix="/api/games", tags=["games"])
 app.include_router(simulations.router, prefix="/api/simulations", tags=["simulations"])
+app.include_router(data_extraction.router, tags=["data-extraction"])
 
 
 @app.get("/")
