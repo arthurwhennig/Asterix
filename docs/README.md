@@ -4,28 +4,26 @@ Asterix is a web application that allows you to simulate real or fictional aster
 
 ## Features
 
-- Interactive 3D visualization of Earth using Cesium.js
+- Interactive 3D visualization of Earth using Cesium.js, Three.js, D3.js
 - Historical asteroid data from NASA APIs
-- Real-time asteroid tracking
-- Real-world asteroid case studies
-- Simulation mode with fictional asteroid creation
-- Impact visualization (craters, fires)
+- Real-time asteroid path tracking
+- Simulation mode with build-it-yourself asteroid creation
+- Impact visualization (craters, secondary impacts (tsunamis, ...))
 - Data and time sliders
 - Single-player game mode to protect Earth from asteroids
-- Sound effects and visual effects
+- Visual effects
 - Gravity tractors, shields, and kinetic impactors
-- Score system with difficulty levels
-- User accounts for saving simulations and game progress
-- Leaderboard for the game mode
-- Health checks and metrics
+- Score system with difficulty levels (cost for each defending mechanism and 1 to  3 star system based on the used costs)
+- User accounts for saving game progress and saved built-it-yourself games
+- public leaderboard for the game mode (ranked by min cost)
 - Error tracking and logging
 
 ## Technologies
 
 - **Frontend**: Next.js with TypeScript, Tailwind CSS, Cesium.js
 - **Backend**: FastAPI (Python)
-- **Database**: PostgreSQL
-- **Cache**: Redis
+- **Database**: Firebase 
+- **Cache**: Redis 
 - **Deployment**: Docker and Docker Compose
 - **Version Control**: GitHub
 
@@ -33,8 +31,8 @@ Asterix is a web application that allows you to simulate real or fictional aster
 
 ```
 /Users/ahennig/Desktop/Asterix/
-├── frontend/          # Next.js frontend application
-├── backend/           # FastAPI backend application
+├── frontend/          # frontend setuo
+├── backend/           # backend setup
 ├── database/          # Database schema and migrations
 ├── deployment/        # Docker and deployment configurations
 ├── docs/             # Documentation files
