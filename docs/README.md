@@ -144,7 +144,7 @@ The API documentation is available at http://localhost:8000/docs when the backen
 
 ## Database Schema
 
-The application uses PostgreSQL with the following main tables:
+The application uses Firebase with the following main tables:
 
 - `users` - User accounts and authentication
 - `asteroids` - Asteroid data (real and fictional)
