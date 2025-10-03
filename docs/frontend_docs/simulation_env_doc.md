@@ -29,40 +29,6 @@ This section allows the user to choose the threat object from two sources.
   - **Data Displayed**: Each list item shows the asteroid's **Name**, **Diameter (km)**, and **Is Hazardous** status.
   - **Interaction**: Clicking an asteroid selects it for the simulation.
 
-- **Mode 2: Historical Impacts**
-  - **UI**: A dropdown list of famous historical impact events.
-  - **Options**: Chicxulub (Dinosaur Killer), Tunguska Event, Chelyabinsk Meteor.
-  - **Interaction**: Selecting an event pre-fills the impactor parameters with historical estimates.
-
----
-
-### Section 2: Select Target Location
-
-- **Primary Action Button**: `"PINPOINT IMPACT ON GLOBE"`
-
-**User Interaction Flow**:
-1. User clicks the button, activating *Targeting Mode*. A crosshair appears on the screen.  
-2. The user clicks a location on the 3D Cesium globe.  
-3. This click triggers an asynchronous API call to the backend:  
-   `POST /api/data-extraction/extract-async` with the selected latitude and longitude.  
-4. The panel enters a loading state, displaying a checklist of the data being fetched in real-time:  
-   - *Fetching Topography... ✓*  
-   - *Querying Geology...*  
-
----
-
-### Section 3: Target Analysis (Auto-Populated)
-
-This read-only section populates with data once the backend extraction is complete. It confirms the properties of the impact site.
-
-**Display Fields:**
-- **Coordinates**: e.g., `30.31° N, 89.58° W`  
-- **Surface Type**: `"Land Impact"` or `"Ocean Impact"`  
-- **Elevation / Depth**: e.g., `-15 m (Coastal Plain)` or `-2,500 m (Ocean Floor)`  
-- **Surface Geology**: e.g., `"Unconsolidated Sediment"` (from WFS query)  
-- **Estimated Target Density**: e.g., `"1950 kg/m³"` (derived from geology)  
-
----
 
 ## 3. Central 3D Viewport & Simulation Visuals
 
