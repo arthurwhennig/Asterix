@@ -13,7 +13,8 @@ Data we will need to provide:
     - Infrastructure & Population Data: To quantify the damage, you need maps showing the locations of cities, roads, critical facilities (hospitals, power plants), and population density.
     - Geological Data: Maps of fault lines are needed to analyze how the impact's seismic shock might interact with pre-existing geological stress.
 
-- Calculate the kinetic impact energy and use the USGS data sets to model secondary consequences:
+
+## Calculate the kinetic impact energy and use the USGS data sets to model secondary consequences:
     - approximate radius 
     - find volume 
     - use density to find the mass 
@@ -53,6 +54,4 @@ First, calculate the crater Dimension(denoted D_c) using the formula above. We c
 Further d denotes the depth of the water at the impact location. 
 H = 0.15((D_c^4)/ (d^2 * r^2))^(1/4)
 
-This formula provides a starting point. A real simulation would require advanced hydrodynamic models and detailed bathymetry (ocean floor topography) data, which can also be obtained from sources like the National Oceanic and Atmospheric Administration (NOAA) alongside USGS coastal data.
-
-We also want to approximate the impact consequences of a tsunami. 
+After calculating the initial wave height (H) at a distance (r), we will use USGS high-resolution coastal DEMs. By identifying the coastal areas where the predicted wave height exceeds the land elevation, we can map the potential inundation zone. We will then overlay this zone with infrastructure and population data to approximate the consequences."
