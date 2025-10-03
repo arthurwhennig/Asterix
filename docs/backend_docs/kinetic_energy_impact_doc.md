@@ -1,14 +1,17 @@
 We want to use the USGS data sets to approximate secondary impact consequences:
 Data we will need to provide:
-    - approximate geolocation
-    - 
-
-
-
-
-
-
-
+### impactor characteristics:
+    - diameter of the impactor 
+    - impactor velocity relative to earth
+    - density of the impactor 
+### target properties:
+    - target type (land or water)
+    - target density 
+    - water depth
+### Geospatial Consequence Data
+    - Topography/Elevation Data: High-resolution Digital Elevation Models (DEMs) are needed for both land and coastal areas. On land, they help model how terrain affects the airblast. For tsunamis, they are crucial for modeling which low-lying coastal areas will be flooded.
+    - Infrastructure & Population Data: To quantify the damage, you need maps showing the locations of cities, roads, critical facilities (hospitals, power plants), and population density.
+    - Geological Data: Maps of fault lines are needed to analyze how the impact's seismic shock might interact with pre-existing geological stress.
 
 - Calculate the kinetic impact energy and use the USGS data sets to model secondary consequences:
     - approximate radius 
@@ -41,5 +44,15 @@ KE = kinetic energy of impactor
 
 M_w = 0.67 * log_10(KE) - 5.87
 
-Then we will use the USGS shake base maps (like PAGER) to estimate the intensity of ground shaking at various distances from the impact epicenter your chosen geolocation
+Then we will use the USGS shake base maps (like PAGER) to estimate the intensity of ground shaking at various distances from the impact epicenter the chosen geolocation
 
+## Tsunami generation 
+If the impact occurs in an ocean, it will generate a tsunami. The properties of the wave depend on the crater size in the seafloor and the ocean depth
+
+First, calculate the crater Dimension(denoted D_c) using the formula above. We can estimate the height of the wave (denoted H) and the distance from the impact location(denoted r). 
+Further d denotes the depth of the water at the impact location. 
+H = 0.15((D_c^4)/ (d^2 * r^2))^(1/4)
+
+This formula provides a starting point. A real simulation would require advanced hydrodynamic models and detailed bathymetry (ocean floor topography) data, which can also be obtained from sources like the National Oceanic and Atmospheric Administration (NOAA) alongside USGS coastal data.
+
+We also want to approximate the impact consequences of a tsunami. 
