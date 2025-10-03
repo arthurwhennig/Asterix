@@ -54,4 +54,6 @@ First, calculate the crater Dimension(denoted D_c) using the formula above. We c
 Further d denotes the depth of the water at the impact location. 
 H = 0.15((D_c^4)/ (d^2 * r^2))^(1/4)
 
+We will use the data from the NOAA and USGS to find or approximate the parameters needed for the above calculation. 
+
 After calculating the initial wave height (H) at a distance (r), we will use USGS high-resolution coastal DEMs. By identifying the coastal areas where the predicted wave height exceeds the land elevation, we can map the potential inundation zone. We will then overlay this zone with infrastructure and population data to approximate the consequences."
