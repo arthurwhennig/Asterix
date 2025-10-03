@@ -60,27 +60,27 @@ Asterix is a comprehensive web application that simulates asteroid impacts on Ea
 Asterix/
 ├── frontend/                    # Next.js frontend application
 │   ├── src/
-│   │   ├── app/                # App Router pages and layouts
-│   │   ├── components/         # Reusable React components
-│   │   ├── lib/                # Utility functions and configurations
-│   │   └── types/              # TypeScript type definitions
-│   ├── public/                 # Static assets
-│   └── package.json           # Frontend dependencies
-├── backend/                    # FastAPI backend application
-│   ├── api/                   # API route handlers
-│   │   └── routes/            # Endpoint implementations
-│   ├── database/              # Database models and connections
-│   ├── alembic/               # Database migrations
-│   ├── main.py               # FastAPI application entry point
-│   └── requirements.txt      # Python dependencies
-├── deployment/                # Infrastructure configuration
-│   ├── docker-compose.yml    # Multi-container orchestration
-│   └── init.sql              # Database initialization
-├── docs/                     # Project documentation
-│   ├── README.md            # Main project documentation
-│   ├── api.md               # API endpoint documentation
-│   └── deployment.md        # Deployment instructions
-└── .env.example             # Environment variables template
+│   │   ├── app/                 # App Router pages and layouts
+│   │   ├── components/          # Reusable React components
+│   │   ├── lib/                 # Utility functions and configurations
+│   │   └── types/               # TypeScript type definitions
+│   ├── public/                  # Static assets
+│   └── package.json             # Frontend dependencies
+├── backend/                     # FastAPI backend application
+│   ├── api/                     # API route handlers
+│   │   └── routes/              # Endpoint implementations
+│   ├── database/                # Database models and connections
+│   ├── alembic/                 # Database migrations
+│   ├── main.py                  # FastAPI application entry point
+│   └── requirements.txt         # Python dependencies
+├── deployment/                  # Infrastructure configuration
+│   ├── docker-compose.yml       # Multi-container orchestration
+│   └── init.sql                 # Database initialization
+├── docs/                        # Project documentation
+│   ├── README.md                # Main project documentation
+│   ├── api.md                   # API endpoint documentation
+│   └── deployment.md            # Deployment instructions
+└── .env.example                 # Environment variables template
 ```
 
 ## Getting Started
