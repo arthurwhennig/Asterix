@@ -48,6 +48,8 @@ The heart of the application, where the entire event unfolds.
 
 ### General Behavior and Layout
 
+The right sidebar features a solid, opaque background, visually separating it from the main 3D viewport. Its color is a slightly lighter shade of the application's primary dark theme, ensuring text is highly readable while maintaining a cohesive, modern aesthetic.
+
 By default, the Consequence Report panel remains collapsed on the right-hand side of the screen, appearing as a simple tab or handle to maximize the main view. When an impact event is simulated, the panel automatically expands to present its full analysis. Users can also manually expand or collapse this sidebar at any time.
 
 The layout is organized vertically for clear readability. At the top is a static, non-collapsible "Brief Overview" that displays the most crucial data. Below this overview, a series of expandable sections, functioning like an accordion, allow the user to delve into more specific areas of the impact's aftermath.
@@ -58,14 +60,16 @@ If the sidebar content exceeds the screen height, the sidebar becomes vertically
 
 The "Brief Overview" section is permanently visible at the top of the expanded sidebar and provides the most critical details at a glance. This non-collapsible area contains key data points from the impact, including:
 
-- **Impactor Profile**: e.g., "A 500-meter wide rock and iron asteroid".
-- **Energy Release**: e.g., "Equal to 60,000 megatons of TNT".
-- **Crater Size**: e.g., "A 10-kilometer wide crater".
-- **Location**: e.g., "Off the coast of Florida".
+- **Impactor Profile**: i.e. key data about the size and composition of the asteroid.
+- **Energy Release**: i.e. the amount of energy released in joules and megatones of TNT.
+- **Crater Size**: i.e. the size of the crater caused by the impact.
+- **Location**: i.e. it's location in relation to well-known ladmarks such as cities, etc.
 
 ### Expandable Sections: Detailed Analysis
 
-Below the Brief Overview, the sidebar features several sections for in-depth analysis. These sections behave as an accordion: expanding one collapses the others, keeping focus on a single topic. Expanding a section pushes lower sections downward. If the content of the sidebar ends up taking more space than the sidebar height, the sidebar becomes scroll-able i.e. you can scroll through the sidebar without scrolling or moving things in the rest of the website. 
+Below the Brief Overview, the sidebar features several sections for in-depth analysis. These sections behave as an accordion: expanding one collapses the others, keeping focus on a single topic. Expanding a section pushes lower sections downward. If the content of the sidebar ends up taking more space than the sidebar height, the sidebar becomes scrollable (i.e., you can scroll through the sidebar without scrolling or moving things in the rest of the website).
+
+**Interactive Key Terms**: Throughout the "Consequence Report," key scientific and technical terms will be displayed in italics. When a user hovers over one of these italicized terms for at least one second, a small, informative tooltip box will appear. This box will be positioned on the left side of the right sidebar, maintaining the same vertical alignment as the hovered term. It will provide a concise explanation, definition, or additional details about the term.
 
 - **Seismic Analysis**
     - **Earthquake Magnitude**: Strength of the impact-induced quake (Richter scale).
