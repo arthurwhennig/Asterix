@@ -1,2 +1,2 @@
 ## Create your own asteroid/meteor 
-    here the users will be able to create their own asteroid/meteors that will impact earth. It will be possible to adjust weight, size, composition, speed, impacting geolation and more. Then they can test their challenges and can also publish them so that other players can play them on the public tab.
+    here the users will be able to modify asteroids that will impact earth. It will be possible to adjust the speed and other variables such as. Then they can test their challenges both in the simulation mode and the defence simulation mode

@@ -1,4 +1,7 @@
 # Simulation Mode Interface Specification
+    There will be 2 simulation modes. One will be for non defence purposes. In this mode "Simulate" the user will simply see the trajectory, the impact and the expected consquences based on the precomputed simulation data. 
+    The second "defence simulation" will be as described below with the additional gamification features. 
+
 ## 1. Overview of Simulation Mode
     The Simulation Mode is the visualization phase where the user witnesses the consequences of their strategic defence configuration. Upon initiating the simulation, the system performs a one-time, high-fidelity physics calculation to determine the asteroid's new trajectory based on the forces exerted by the placed defence mechanisms.
 
