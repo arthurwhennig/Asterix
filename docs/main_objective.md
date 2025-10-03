@@ -1,0 +1,6 @@
+# Accurate simulation of asteroid impacts
+    The absolute main objective is to create a scientifically accurate simulation tool that allows for concrete asteroid impact predicitions and secondary consquences such as earthquakes and tsunamis. 
+    The tool is supposed to be educational and provide decision-support for asteroid risk management. 
+
+    It is essential that the focus still lies on the threat asteroids could serve. 
+    Thus we must have the create-your-own mode be one of the main points in the application
