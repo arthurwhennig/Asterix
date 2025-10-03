@@ -42,23 +42,19 @@ This is the core interactive component of Defense Mode.
 - **Asset Arsenal**: A palette of available defense mechanisms, each with an icon, name, and cost.
 
 #### Available Assets:
-
+These will be able to be selected as a horizontal bar on the bottom of the screen:
 - 🚀 **Kinetic Impactor**: A sleek, arrow-like spacecraft.  
 - 🔦 **Laser Ablation**: A high-tech satellite with a large primary mirror or phased array emitter.  
 - 🛰️ **Gravity Tractor**: A bulky, powerful-looking spacecraft with prominent spherical masses.  
 
-> **Deployment Interaction Flow**  
-> - User clicks an asset from the arsenal (e.g., *"Kinetic Impactor"*).  
-> - The selected asset’s box is surrounded by a **fading green highlight**, providing visual feedback for the current choice.  
-> - The asset icon is attached to the mouse cursor.  
-> - The user moves the cursor over the asteroid's trajectory line in the 3D view. The line highlights to show valid deployment zones.  
-> - The user clicks on the trajectory to *place* the defense asset. A 3D model of the asset appears at that point in space, and the budget is deducted.  
-> - The trajectory line instantly updates visually, showing a new, deflected path:  
->   - **Red** → Impact trajectory.  
->   - **Yellow** → Near miss.  
->   - **Green** → Safe trajectory.  
-> - Multiple assets can be placed, further refining the asteroid’s path.
-
+ **Deployment Interaction Flow**  
+ - User clicks an asset from the arsenal (e.g., *"Kinetic Impactor"*).  
+ - The selected asset’s box is surrounded by a **fading green highlight**, providing visual feedback for the current choice.  
+ - The asset icon is attached to the mouse cursor.  
+ - The user moves the cursor over the hull of the Earth
+ - The user can place the defence item on click
+ - The grand total cost will be recalculated
+ - The user can remove already placed objects by clicking on them which will open a menu on the top right of the screen that gives information of the placed geolocation and lets the user the delete the placed item
 ---
 
 ## 3. Central 3D Viewport: The Strategic View
@@ -66,34 +62,24 @@ This is the core interactive component of Defense Mode.
 - **Initial State**: Earth and Moon are visible. The asteroid's potential impact trajectory is shown as a dashed red line.  
   *(Final impact point is hidden – only the path is visible.)*
 
-- **Placing Assets**: When a defense asset is deployed, its 3D model appears along the trajectory line.
+- **Placing Assets**: When a defense asset is deployed, its 3D model appears along the hull of the earth
+  
 
-- **Dynamic Trajectory Update**:  
-  - A Gravity Tractor far from Earth → subtle bend in the path.  
-  - A Kinetic Impactor closer to Earth → sharp “kink” in the line.  
-
-- **Focus**: No cinematic impact visuals during planning; the emphasis is on orbital mechanics and trajectory changes.
+- **Focus**: No cinematic impact visuals during planning.
 
 ---
 
 ## 4. Right Sidebar: Mission Success Prediction & Report Card
 
-This panel provides predictive analysis during planning and a detailed, layered score after execution.
-
-### Pre-Simulation: Predictive Analysis
-
-- **Status Readout** (large, color-coded text):  
-  - 🟥 *PREDICTED OUTCOME: DIRECT IMPACT*  
-  - 🟨 *PREDICTED OUTCOME: NEAR MISS*  
-  - 🟩 *PREDICTED OUTCOME: THREAT NEUTRALIZED*  
-
-- **Predicted Impact Data** (if impact remains likely):  
-  - Crater Size: ~8.5 km  
-  - Quake: ~Mw 6.9  
+This panel provides a detailed, layered score after execution.
 
 ### Post-Simulation: Mission Report Card
 
 Triggered by the **EXECUTE DEFENSE PLAN** button.
+**The asteroid**:
+- Simulate the outcome of the asteroids trajectory based on placed defence mechanism. This shows the asteroid moving through space. 
+
+After the asteroid has hit Earth or has gone by the following will be displayed:
 
 **Section 1: Mission Summary (Always Visible)**  
 - Outcome: *SUCCESS* / *FAILURE*  
@@ -104,7 +90,7 @@ Triggered by the **EXECUTE DEFENSE PLAN** button.
 - Total Cost  
 - Consequences Mitigated (e.g., `100% - Full Prevention`, `85% - Impact shifted to unpopulated ocean`).
 
-**Section 2: Detailed Consequence Analysis (Expandable)**  
+**Section 2: Detailed Consequence Analysis (Expandable, Optional based on impact/no impact)**  
 - Seismic: Magnitude, Shaking Zones  
 - Social: Casualties, Displaced Population  
 - Economic: Property Loss, Disruption  
