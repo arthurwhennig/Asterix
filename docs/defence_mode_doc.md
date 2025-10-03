@@ -1,7 +1,7 @@
 # Defence mode interface
     The defence mode allows the user to see the projected trajectory of the asteroid/meteor. The user can place the defence mechanisms (gravity tractors, shields) in space. The trajectory of the asteroid/meteor will not be altered in this interface. This will only happen once the user stars the simulation. 
 
-## defence components
+## Defence components
     Each of the components comes with a cost that represents how much this would cost in the real world. The grand total will appear on the top right of the screen. 
 
 ## SHOP
