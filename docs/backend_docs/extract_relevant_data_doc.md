@@ -1,7 +1,13 @@
 # Sources to extract from
 ## NASA NEO API 
-    - Impactor diameter: estimated size of asteroid
+### JPL Small-Body Database (SBDB) API
+    - Impactor diameter: estimated size of asteroid : 
+        - API Field: Look for the "diameter" field in the phys_par (physical parameters) section of the API's JSON response.
+        - Details: This value is typically given in kilometers (km), so this must be converedt to meters for your volume and mass calculations. Often, a range is provided; using the nominal or average value is a good approach.
     - Impactor velocity: asteroids speed relative to earth
+        - API Field: Look for the "v_rel" field within the ca_data (close-approach data) section of the API response.
+        - Details: This value represents the relative velocity and is given in kilometers per second (km/s). This must be converted to meters per second (m/s) for the kinetic energy formula.
+
 ## USgS 
     - Geological Maps: Extract the target surface density (e.g., rock, soil) for the chosen impact location.
     - Digital Elevation Models (DEMs): Get high-resolution elevation data for the area. This is critical for modeling tsunami inundation and airblast effects over terrain.
