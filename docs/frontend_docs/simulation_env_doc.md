@@ -46,25 +46,49 @@ The heart of the application, where the entire event unfolds.
 
 ## 4. Right Sidebar: The Consequence Report
 
-This panel is initially collapsed and expands upon impact to provide a detailed, multi-tabbed analysis of the consequences.
+### General Behavior and Layout
 
-### Tab 1: Executive Summary
-- **Energy Release**: Kinetic Energy (Joules) and TNT Equivalent (Megatons).  
-- **Primary Physical Effects**: Crater Diameter (km), Earthquake Magnitude (Mw).  
-- **Human Impact Overview**: e.g., *"Catastrophic damage expected within a 50 km radius. Significant tsunami risk for adjacent coastlines."*  
+By default, the Consequence Report panel remains collapsed on the right-hand side of the screen, appearing as a simple tab or handle to maximize the main view. When an impact event is simulated, the panel automatically expands to present its full analysis. Users can also manually expand or collapse this sidebar at any time.
 
-### Tab 2: Airblast Analysis
-- **Damage Radii**: Breakdown of distances for each PSI threshold.  
-- **Interactive Chart**: Overpressure (PSI) vs. Distance (km).  
-- **Infrastructure Report**: Scrollable list of cities, airports, and power plants within damage rings.  
+The layout is organized vertically for clear readability. At the top is a static, non-collapsible "Brief Overview" that displays the most crucial data. Below this overview, a series of expandable sections, functioning like an accordion, allow the user to delve into more specific areas of the impact's aftermath.
 
-### Tab 3: Seismic Analysis
-- **ShakeMap Legend**: Explains the color-coding of seismic intensity.  
-- **Fault Proximity**: e.g., *"Impact is 75 km from the San Andreas Fault."*  
+If the sidebar content exceeds the screen height, the sidebar becomes vertically scrollable without affecting the rest of the UI.
 
-### Tab 4: Tsunami Analysis *(Ocean Impacts Only)*
-- **Wave Propagation Model**: Estimated tsunami arrival times at coastlines.  
-- **Inundation Risk**: List of high-risk coastal areas where wave height exceeds DEM elevation.  
+### Section: Brief Overview
+
+The "Brief Overview" section is permanently visible at the top of the expanded sidebar and provides the most critical details at a glance. This non-collapsible area contains key data points from the impact, including:
+
+- **Impactor Profile**: e.g., "A 500-meter wide rock and iron asteroid".
+- **Energy Release**: e.g., "Equal to 60,000 megatons of TNT".
+- **Crater Size**: e.g., "A 10-kilometer wide crater".
+- **Location**: e.g., "Off the coast of Florida".
+
+### Expandable Sections: Detailed Analysis
+
+Below the Brief Overview, the sidebar features several sections for in-depth analysis. These sections behave as an accordion: expanding one collapses the others, keeping focus on a single topic. Expanding a section pushes lower sections downward. If the content of the sidebar ends up taking more space than the sidebar height, the sidebar becomes scroll-able i.e. you can scroll through the sidebar without scrolling or moving things in the rest of the website. 
+
+- **Seismic Analysis**
+    - **Earthquake Magnitude**: Strength of the impact-induced quake (Richter scale).
+    - **Shaking Intensity Zones**: Map of areas from light tremors to catastrophic shaking.
+
+- **Social Analysis**
+    - **Human Casualties**: Estimated fatalities and injuries.
+    - **Population Displaced**: Estimated evacuees.
+
+- **Economic Analysis**
+    - **Destroyed Property**: Monetary value of destroyed homes, buildings, and infrastructure.
+    - **Economic Disruption**: Regional and global economic impacts.
+    - **Critical Infrastructure**: Impact to critical infrastructure systems.
+
+- **Tsunami Analysis** (conditional: shown only for ocean/near-coast impacts)
+    - **Initial Wave Height**: Size of the wave at the impact site.
+    - **Tsunami Travel Time**: Map of arrival times to coastlines.
+    - **Coastal Flooding**: Projected inland inundation extent.
+
+- **Environmental Analysis**
+    - **Atmospheric Dust & Cooling**: Estimated debris and potential cooling effects.
+    - **Wildfire Radius**: Area ignited by thermal radiation.
+    - **Damage to Nature**: Impacts to forests, wildlife, and ecosystems.
 
 ---
 
