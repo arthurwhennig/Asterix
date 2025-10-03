@@ -70,11 +70,11 @@ export default function DefenseMode() {
   };
 
   return (
-    <div className="flex h-screen bg-gray-900">
+    <div className="relative w-full" style={{ height: 'calc(100vh - 73px)' }}>
       {/* Left Sidebar - Mission Briefing & Asset Deployment */}
-      <div className={`transition-all duration-300 ${
+      <div className={`absolute top-0 left-0 h-full transition-all duration-300 ${
         leftSidebarCollapsed ? 'w-12' : 'w-80'
-      } bg-gray-800 border-r border-gray-700 flex flex-col`}>
+      } bg-gray-800 border-r border-gray-700 flex flex-col z-20`}>
         {leftSidebarCollapsed ? (
           <button
             onClick={() => setLeftSidebarCollapsed(false)}
@@ -107,20 +107,20 @@ export default function DefenseMode() {
         )}
       </div>
 
-      {/* Main 3D Viewport */}
-      <div className="flex-1 flex flex-col">
-        <div className="flex-1 relative">
-          <EnhancedCesiumViewer
-            selectedAsteroid={selectedThreat}
-            impactData={null}
-            isSimulating={isExecuting}
-            mode="defense"
-            deployedAssets={deployedAssets}
-            onAssetRemove={handleAssetRemove}
-          />
-        </div>
-        
-        {/* Asset Deployment Bar */}
+      {/* Main 3D Viewport - Full Screen */}
+      <div className="absolute inset-0 z-0">
+        <EnhancedCesiumViewer
+          selectedAsteroid={selectedThreat}
+          impactData={null}
+          isSimulating={isExecuting}
+          mode="defense"
+          deployedAssets={deployedAssets}
+          onAssetRemove={handleAssetRemove}
+        />
+      </div>
+
+      {/* Asset Deployment Bar - Floating */}
+      <div className="absolute bottom-0 left-0 right-0 z-30">
         <AssetDeployment
           onAssetDeploy={handleAssetDeploy}
           deployedAssets={deployedAssets}
@@ -133,9 +133,9 @@ export default function DefenseMode() {
       </div>
 
       {/* Right Sidebar - Mission Report */}
-      <div className={`transition-all duration-300 ${
+      <div className={`absolute top-0 right-0 h-full transition-all duration-300 ${
         rightSidebarCollapsed ? 'w-12' : 'w-96'
-      } bg-gray-800 border-l border-gray-700 flex flex-col`}>
+      } bg-gray-800 border-l border-gray-700 flex flex-col z-20`}>
         {rightSidebarCollapsed ? (
           <button
             onClick={() => setRightSidebarCollapsed(false)}

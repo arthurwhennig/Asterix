@@ -3,9 +3,11 @@
 import { useEffect, useRef } from 'react';
 import * as Cesium from 'cesium';
 
-// Set Cesium base path
+// Set Cesium base path and access token
 if (typeof window !== 'undefined') {
   (window as any).CESIUM_BASE_URL = '/cesium/';
+  // Set the Cesium Ion access token
+  Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJhOGE4ZTU1My00MWZhLTRhY2YtOWY0Zi02ZmJiMzlmMTA0NTQiLCJpZCI6MzQ2OTQ2LCJpYXQiOjE3NTk1MTg4NTN9.P1FImMkJczHJVSERLAWrrFPJOLEE9J4_8rh7qCJP-l4';
 }
 
 interface Asteroid {
@@ -81,9 +83,15 @@ export default function EnhancedCesiumViewer({
   useEffect(() => {
     if (cesiumContainer.current && !viewerRef.current) {
       try {
-        // Initialize Cesium viewer
+        console.log('Initializing Cesium viewer...');
+        console.log('Container element:', cesiumContainer.current);
+        console.log('Cesium available:', typeof Cesium !== 'undefined');
+        
+        // Set the Cesium Ion access token
+        Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJhOGE4ZTU1My00MWZhLTRhY2YtOWY0Zi02ZmJiMzlmMTA0NTQiLCJpZCI6MzQ2OTQ2LCJpYXQiOjE3NTk1MTg4NTN9.P1FImMkJczHJVSERLAWrrFPJOLEE9J4_8rh7qCJP-l4';
+        
+        // Initialize Cesium viewer with minimal configuration
         const viewer = new Cesium.Viewer(cesiumContainer.current, {
-          terrainProvider: Cesium.createWorldTerrain(),
           homeButton: false,
           sceneModePicker: false,
           baseLayerPicker: false,
@@ -95,6 +103,17 @@ export default function EnhancedCesiumViewer({
           geocoder: false,
           infoBox: false,
           selectionIndicator: false,
+        });
+
+        // Enable Earth imagery with the valid token
+        viewer.scene.globe.enableLighting = true;
+        viewer.scene.skyAtmosphere.show = true;
+        
+        // Add error handling for imagery loading
+        viewer.scene.globe.imageryLayers.layerAdded.addEventListener((layer) => {
+          layer.errorEvent.addEventListener((error) => {
+            console.warn('Imagery layer error:', error);
+          });
         });
 
         // Set initial view based on mode
@@ -109,9 +128,7 @@ export default function EnhancedCesiumViewer({
           });
         }
 
-        // Add Earth's atmosphere
-        viewer.scene.skyAtmosphere.show = true;
-        viewer.scene.globe.enableLighting = true;
+        // Earth's atmosphere is already enabled above
 
         // Add some sample asteroids for demonstration
         const asteroidPositions = [
@@ -143,6 +160,7 @@ export default function EnhancedCesiumViewer({
         });
 
         viewerRef.current = viewer;
+        console.log('Cesium viewer initialized successfully:', viewer);
 
         // Cleanup function
         return () => {
@@ -153,6 +171,12 @@ export default function EnhancedCesiumViewer({
         };
       } catch (error) {
         console.error('Error initializing Cesium:', error);
+        console.error('Error details:', {
+          message: error.message,
+          stack: error.stack,
+          cesiumContainer: cesiumContainer.current,
+          cesiumAvailable: typeof Cesium !== 'undefined'
+        });
       }
     }
   }, [mode]);
@@ -290,7 +314,7 @@ export default function EnhancedCesiumViewer({
     }
   }, [impactData]);
 
-  // Handle mode changes
+  // Handle mode changes - only update camera if mode actually changed
   useEffect(() => {
     if (viewerRef.current) {
       if (mode === 'defense') {
@@ -370,23 +394,22 @@ export default function EnhancedCesiumViewer({
   };
 
   return (
-    <div className="w-full h-full relative">
+    <div className="w-full h-full">
       <div
         ref={cesiumContainer}
         className="w-full h-full"
-        style={{ minHeight: '400px' }}
       />
       
       {/* Overlay for mode-specific UI elements */}
       {mode === 'defense' && (
-        <div className="absolute top-4 left-4 bg-gray-800 bg-opacity-90 rounded-lg p-3">
+        <div className="absolute top-4 left-4 bg-gray-800 bg-opacity-90 rounded-lg p-3 z-10">
           <h3 className="text-white font-semibold mb-2">Defense Mode</h3>
           <p className="text-gray-300 text-sm">Strategic view for asset deployment</p>
         </div>
       )}
       
       {mode === 'simulation' && isSimulating && (
-        <div className="absolute top-4 right-4 bg-red-800 bg-opacity-90 rounded-lg p-3">
+        <div className="absolute top-4 right-4 bg-red-800 bg-opacity-90 rounded-lg p-3 z-10">
           <h3 className="text-white font-semibold mb-2">Simulation Running</h3>
           <p className="text-gray-300 text-sm">Impact sequence in progress</p>
         </div>
