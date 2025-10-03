@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "@types/cesium": "^1.67.14"
+  }
+}

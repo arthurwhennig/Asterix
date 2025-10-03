@@ -9,6 +9,7 @@ import AssetDeployment from './AssetDeployment';
 export default function DefenseMode() {
   const [leftSidebarCollapsed, setLeftSidebarCollapsed] = useState(false);
   const [rightSidebarCollapsed, setRightSidebarCollapsed] = useState(true);
+  const [bottomShopCollapsed, setBottomShopCollapsed] = useState(false);
   const [selectedThreat, setSelectedThreat] = useState<any>(null);
   const [deployedAssets, setDeployedAssets] = useState<any[]>([]);
   const [budget, setBudget] = useState(1000000000000); // $1T budget
@@ -73,8 +74,8 @@ export default function DefenseMode() {
     <div className="relative w-full" style={{ height: 'calc(100vh - 73px)' }}>
       {/* Left Sidebar - Mission Briefing & Asset Deployment */}
       <div className={`absolute top-0 left-0 h-full transition-all duration-300 ${
-        leftSidebarCollapsed ? 'w-12' : 'w-80'
-      } bg-gray-800 border-r border-gray-700 flex flex-col z-20`}>
+        leftSidebarCollapsed ? 'w-12 bg-gray-900' : 'w-80 bg-gray-900 bg-opacity-80 backdrop-blur-sm'
+      } border-r border-gray-700 flex flex-col z-20`}>
         {leftSidebarCollapsed ? (
           <button
             onClick={() => setLeftSidebarCollapsed(false)}
@@ -108,7 +109,18 @@ export default function DefenseMode() {
       </div>
 
       {/* Main 3D Viewport - Full Screen */}
-      <div className="absolute inset-0 z-0">
+      <div 
+        className="absolute inset-0 z-0"
+        style={{
+          width: '100%',
+          height: '100%',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0
+        }}
+      >
         <EnhancedCesiumViewer
           selectedAsteroid={selectedThreat}
           impactData={null}
@@ -119,23 +131,52 @@ export default function DefenseMode() {
         />
       </div>
 
-      {/* Asset Deployment Bar - Floating */}
+      {/* Asset Deployment Bar - Floating & Collapsible */}
       <div className="absolute bottom-0 left-0 right-0 z-30">
-        <AssetDeployment
-          onAssetDeploy={handleAssetDeploy}
-          deployedAssets={deployedAssets}
-          budget={budget}
-          usedBudget={usedBudget}
-          onExecuteDefense={handleExecuteDefense}
-          isExecuting={isExecuting}
-          selectedThreat={selectedThreat}
-        />
+        {bottomShopCollapsed ? (
+          <div className="bg-gray-900 bg-opacity-95 p-2">
+            <button
+              onClick={() => setBottomShopCollapsed(false)}
+              className="flex items-center justify-center w-full p-2 text-gray-400 hover:text-white hover:bg-gray-700 transition-colors rounded-lg"
+              title="Expand Defense Shop"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+              </svg>
+              <span className="ml-2 text-sm font-medium">Defense Shop</span>
+            </button>
+          </div>
+        ) : (
+          <div className="bg-gray-900 bg-opacity-80 backdrop-blur-sm">
+            <div className="flex items-center justify-between p-2 border-b border-gray-700">
+              <h3 className="text-white font-semibold">Defense Shop</h3>
+              <button
+                onClick={() => setBottomShopCollapsed(true)}
+                className="p-1 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors"
+                title="Collapse Defense Shop"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+            </div>
+            <AssetDeployment
+              onAssetDeploy={handleAssetDeploy}
+              deployedAssets={deployedAssets}
+              budget={budget}
+              usedBudget={usedBudget}
+              onExecuteDefense={handleExecuteDefense}
+              isExecuting={isExecuting}
+              selectedThreat={selectedThreat}
+            />
+          </div>
+        )}
       </div>
 
       {/* Right Sidebar - Mission Report */}
       <div className={`absolute top-0 right-0 h-full transition-all duration-300 ${
-        rightSidebarCollapsed ? 'w-12' : 'w-96'
-      } bg-gray-800 border-l border-gray-700 flex flex-col z-20`}>
+        rightSidebarCollapsed ? 'w-12 bg-gray-900' : 'w-96 bg-gray-900 bg-opacity-80 backdrop-blur-sm'
+      } border-l border-gray-700 flex flex-col z-20`}>
         {rightSidebarCollapsed ? (
           <button
             onClick={() => setRightSidebarCollapsed(false)}

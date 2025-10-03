@@ -126,7 +126,7 @@ export default function AssetDeployment({
   const budgetPercentage = (usedBudget / budget) * 100;
 
   return (
-    <div className="bg-gray-800 bg-opacity-95 border-t border-gray-700 p-4 backdrop-blur-sm">
+    <div className="bg-gray-900 bg-opacity-80 border-t border-gray-700 p-4 backdrop-blur-sm">
       {/* Budget Display */}
       <div className="mb-4">
         <div className="flex items-center justify-between mb-2">

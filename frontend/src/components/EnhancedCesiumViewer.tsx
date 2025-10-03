@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import * as Cesium from 'cesium';
+import 'cesium/Build/Cesium/Widgets/widgets.css';
 
 // Set Cesium base path and access token
 if (typeof window !== 'undefined') {
@@ -80,116 +81,146 @@ export default function EnhancedCesiumViewer({
   const viewerRef = useRef<Cesium.Viewer | null>(null);
   const entitiesRef = useRef<Cesium.Entity[]>([]);
 
-  useEffect(() => {
-    if (cesiumContainer.current && !viewerRef.current) {
-      try {
-        console.log('Initializing Cesium viewer...');
-        console.log('Container element:', cesiumContainer.current);
-        console.log('Cesium available:', typeof Cesium !== 'undefined');
-        
-        // Set the Cesium Ion access token
-        Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJhOGE4ZTU1My00MWZhLTRhY2YtOWY0Zi02ZmJiMzlmMTA0NTQiLCJpZCI6MzQ2OTQ2LCJpYXQiOjE3NTk1MTg4NTN9.P1FImMkJczHJVSERLAWrrFPJOLEE9J4_8rh7qCJP-l4';
-        
-        // Initialize Cesium viewer with minimal configuration
-        const viewer = new Cesium.Viewer(cesiumContainer.current, {
-          homeButton: false,
-          sceneModePicker: false,
-          baseLayerPicker: false,
-          navigationHelpButton: false,
-          animation: false,
-          timeline: false,
-          fullscreenButton: false,
-          vrButton: false,
-          geocoder: false,
-          infoBox: false,
-          selectionIndicator: false,
-        });
-
-        // Enable Earth imagery with the valid token
-        viewer.scene.globe.enableLighting = true;
-        viewer.scene.skyAtmosphere.show = true;
-        
-        // Add error handling for imagery loading
-        viewer.scene.globe.imageryLayers.layerAdded.addEventListener((layer) => {
-          layer.errorEvent.addEventListener((error) => {
-            console.warn('Imagery layer error:', error);
-          });
-        });
-
-        // Set initial view based on mode
-        if (mode === 'simulation') {
-          viewer.camera.setView({
-            destination: Cesium.Cartesian3.fromDegrees(-75.59777, 40.03883, 10000000),
-          });
-        } else {
-          // Defense mode - solar system view
-          viewer.camera.setView({
-            destination: Cesium.Cartesian3.fromDegrees(0, 0, 50000000),
-          });
-        }
-
-        // Earth's atmosphere is already enabled above
-
-        // Add some sample asteroids for demonstration
-        const asteroidPositions = [
-          { longitude: -75.59777, latitude: 40.03883, height: 1000000 },
-          { longitude: -100.0, latitude: 30.0, height: 2000000 },
-          { longitude: 0.0, latitude: 0.0, height: 1500000 },
-          { longitude: 120.0, latitude: -30.0, height: 3000000 },
-        ];
-
-        asteroidPositions.forEach((pos, index) => {
-          const entity = viewer.entities.add({
-            position: Cesium.Cartesian3.fromDegrees(pos.longitude, pos.latitude, pos.height),
-            billboard: {
-              image: '/asteroid-icon.svg',
-              scale: 0.5,
-              verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
-            },
-            label: {
-              text: `Asteroid ${index + 1}`,
-              font: '12pt sans-serif',
-              pixelOffset: new Cesium.Cartesian2(0, -50),
-              fillColor: Cesium.Color.YELLOW,
-              outlineColor: Cesium.Color.BLACK,
-              outlineWidth: 2,
-              style: Cesium.LabelStyle.FILL_AND_OUTLINE,
-            },
-          });
-          entitiesRef.current.push(entity);
-        });
-
-        viewerRef.current = viewer;
-        console.log('Cesium viewer initialized successfully:', viewer);
-
-        // Cleanup function
-        return () => {
-          if (viewerRef.current) {
-            viewerRef.current.destroy();
-            viewerRef.current = null;
-          }
-        };
-      } catch (error) {
-        console.error('Error initializing Cesium:', error);
-        console.error('Error details:', {
-          message: error.message,
-          stack: error.stack,
-          cesiumContainer: cesiumContainer.current,
-          cesiumAvailable: typeof Cesium !== 'undefined'
-        });
-      }
-    }
-  }, [mode]);
-
-  // Update visualization when asteroid is selected
-  useEffect(() => {
-    if (viewerRef.current && selectedAsteroid) {
-      // Clear existing asteroid entities
+  // Centralized cleanup function to clear all simulation entities
+  const clearAllEntities = () => {
+    if (viewerRef.current) {
       entitiesRef.current.forEach(entity => {
         viewerRef.current!.entities.remove(entity);
       });
       entitiesRef.current = [];
+    }
+  };
 
+  useEffect(() => {
+    // This effect hook will now handle the viewer's lifecycle
+    // based on the container div's actual size.
+
+    const container = cesiumContainer.current;
+    if (!container) return; // Exit if the ref isn't attached yet
+
+    const resizeObserver = new ResizeObserver(() => {
+      // This callback runs when the container is first painted or resized.
+      // We only want to run the initialization logic ONCE.
+      if (container && container.clientHeight > 0 && !viewerRef.current) {
+        
+        try {
+          console.log('Container has size, initializing Cesium viewer...');
+          console.log('Container dimensions:', {
+            width: container.clientWidth,
+            height: container.clientHeight
+          });
+        
+          // Set the Cesium Ion access token
+          Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJhOGE4ZTU1My00MWZhLTRhY2YtOWY0Zi02ZmJiMzlmMTA0NTQiLCJpZCI6MzQ2OTQ2LCJpYXQiOjE3NTk1MTg4NTN9.P1FImMkJczHJVSERLAWrrFPJOLEE9J4_8rh7qCJP-l4';
+        
+          const viewer = new Cesium.Viewer(container, {
+            // Your existing options
+            homeButton: false,
+            sceneModePicker: false,
+            baseLayerPicker: false,
+            navigationHelpButton: false,
+            animation: false,
+            timeline: false,
+            fullscreenButton: false,
+            vrButton: false,
+            geocoder: false,
+            infoBox: false,
+            selectionIndicator: false,
+            // This is still very important for crisp visuals
+            useBrowserRecommendedResolution: true, 
+          });
+
+          viewer.scene.globe.enableLighting = true;
+          viewer.scene.skyAtmosphere.show = true;
+          
+          // Add error handling for imagery loading
+          viewer.scene.globe.imageryLayers.layerAdded.addEventListener((layer) => {
+            layer.errorEvent.addEventListener((error) => {
+              console.warn('Imagery layer error:', error);
+            });
+          });
+
+          // Set initial view based on mode
+          if (mode === 'simulation') {
+            viewer.camera.setView({
+              destination: Cesium.Cartesian3.fromDegrees(-75.59777, 40.03883, 10000000),
+            });
+          } else {
+            // Defense mode - solar system view
+            viewer.camera.setView({
+              destination: Cesium.Cartesian3.fromDegrees(0, 0, 50000000),
+            });
+          }
+
+          // Add some sample asteroids for demonstration
+          const asteroidPositions = [
+            { longitude: -75.59777, latitude: 40.03883, height: 1000000 },
+            { longitude: -100.0, latitude: 30.0, height: 2000000 },
+            { longitude: 0.0, latitude: 0.0, height: 1500000 },
+            { longitude: 120.0, latitude: -30.0, height: 3000000 },
+          ];
+
+          asteroidPositions.forEach((pos, index) => {
+            const entity = viewer.entities.add({
+              position: Cesium.Cartesian3.fromDegrees(pos.longitude, pos.latitude, pos.height),
+              billboard: {
+                image: '/asteroid-icon.svg',
+                scale: 0.5,
+                verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+              },
+              label: {
+                text: `Asteroid ${index + 1}`,
+                font: '12pt sans-serif',
+                pixelOffset: new Cesium.Cartesian2(0, -50),
+                fillColor: Cesium.Color.YELLOW,
+                outlineColor: Cesium.Color.BLACK,
+                outlineWidth: 2,
+                style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+              },
+            });
+            entitiesRef.current.push(entity);
+          });
+
+          viewerRef.current = viewer; // Save the viewer instance
+          
+          // Once the viewer is created, we don't need the observer anymore
+          resizeObserver.disconnect();
+          console.log('Cesium viewer initialized and observer disconnected.');
+
+        } catch (error) {
+          console.error('Error initializing Cesium:', error);
+          console.error('Error details:', {
+            message: error.message,
+            stack: error.stack,
+            container: container,
+            cesiumAvailable: typeof Cesium !== 'undefined'
+          });
+        }
+      }
+    });
+
+    // Start observing the container element
+    resizeObserver.observe(container);
+
+    // Cleanup function: This is crucial for React
+    return () => {
+      resizeObserver.disconnect();
+      if (viewerRef.current && !viewerRef.current.isDestroyed()) {
+        viewerRef.current.destroy();
+        viewerRef.current = null;
+      }
+    };
+    
+    // We remove all dependencies from the array. This hook should run
+    // only once when the component mounts.
+  }, []); // Empty dependency array - runs only once on mount
+
+  // Update visualization when asteroid is selected
+  useEffect(() => {
+    // Clear ALL previous entities before adding new ones
+    clearAllEntities();
+
+    if (viewerRef.current && selectedAsteroid) {
       // Add selected asteroid visualization
       const asteroidEntity = viewerRef.current.entities.add({
         position: Cesium.Cartesian3.fromDegrees(-75.59777, 40.03883, 1000000),
@@ -229,6 +260,9 @@ export default function EnhancedCesiumViewer({
 
   // Update visualization when impact data is available
   useEffect(() => {
+    // NOTE: Do NOT clear all entities here. Just add the new ones.
+    // The selection hook has already cleared the board.
+
     if (viewerRef.current && impactData) {
       const impactPosition = Cesium.Cartesian3.fromDegrees(-75.59777, 40.03883, 0);
 
@@ -394,10 +428,17 @@ export default function EnhancedCesiumViewer({
   };
 
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full relative">
       <div
+        id="cesiumContainer"
         ref={cesiumContainer}
-        className="w-full h-full"
+        className="absolute inset-0 w-full h-full"
+        style={{
+          width: '100%',
+          height: '100%',
+          minWidth: '100%',
+          minHeight: '100%'
+        }}
       />
       
       {/* Overlay for mode-specific UI elements */}

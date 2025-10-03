@@ -27,8 +27,8 @@ export default function SimulationMode() {
     <div className="relative w-full" style={{ height: 'calc(100vh - 73px)' }}>
       {/* Left Sidebar - Scenario Hub */}
       <div className={`absolute top-0 left-0 h-full transition-all duration-300 ${
-        leftSidebarCollapsed ? 'w-12' : 'w-80'
-      } bg-gray-800 border-r border-gray-700 flex flex-col z-20`}>
+        leftSidebarCollapsed ? 'w-12 bg-gray-900' : 'w-80 bg-gray-900 bg-opacity-80 backdrop-blur-sm'
+      } border-r border-gray-700 flex flex-col z-20`}>
         {leftSidebarCollapsed ? (
           <button
             onClick={() => setLeftSidebarCollapsed(false)}
@@ -62,7 +62,18 @@ export default function SimulationMode() {
       </div>
 
       {/* Main 3D Viewport - Full Screen */}
-      <div className="absolute inset-0 z-0">
+      <div 
+        className="absolute inset-0 z-0"
+        style={{
+          width: '100%',
+          height: '100%',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0
+        }}
+      >
         <EnhancedCesiumViewer
           selectedAsteroid={selectedAsteroid}
           impactData={impactData}
@@ -82,8 +93,8 @@ export default function SimulationMode() {
 
       {/* Right Sidebar - Consequence Report */}
       <div className={`absolute top-0 right-0 h-full transition-all duration-300 ${
-        rightSidebarCollapsed ? 'w-12' : 'w-96'
-      } bg-gray-800 border-l border-gray-700 flex flex-col z-20`}>
+        rightSidebarCollapsed ? 'w-12 bg-gray-900' : 'w-96 bg-gray-900 bg-opacity-80 backdrop-blur-sm'
+      } border-l border-gray-700 flex flex-col z-20`}>
         {rightSidebarCollapsed ? (
           <button
             onClick={() => setRightSidebarCollapsed(false)}
