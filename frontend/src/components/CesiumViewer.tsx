@@ -4,8 +4,8 @@ import { useEffect, useRef } from 'react';
 import * as Cesium from 'cesium';
 
 // Set Cesium base path
-if (typeof window !== 'undefined') {
-  (window as any).CESIUM_BASE_URL = '/cesium/';
+if (typeof window !== "undefined") {
+  (window as { CESIUM_BASE_URL?: string }).CESIUM_BASE_URL = "/cesium/";
 }
 
 export default function CesiumViewer() {
@@ -33,7 +33,11 @@ export default function CesiumViewer() {
 
         // Set initial view
         viewer.camera.setView({
-          destination: Cesium.Cartesian3.fromDegrees(-75.59777, 40.03883, 10000000),
+          destination: Cesium.Cartesian3.fromDegrees(
+            -75.59777,
+            40.03883,
+            10000000
+          ),
         });
 
         // Add some sample asteroids as billboards
@@ -46,15 +50,19 @@ export default function CesiumViewer() {
 
         asteroidPositions.forEach((pos, index) => {
           viewer.entities.add({
-            position: Cesium.Cartesian3.fromDegrees(pos.longitude, pos.latitude, pos.height),
+            position: Cesium.Cartesian3.fromDegrees(
+              pos.longitude,
+              pos.latitude,
+              pos.height
+            ),
             billboard: {
-              image: '/asteroid-icon.svg',
+              image: "/asteroid-icon.svg",
               scale: 0.5,
               verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
             },
             label: {
               text: `Asteroid ${index + 1}`,
-              font: '12pt sans-serif',
+              font: "12pt sans-serif",
               pixelOffset: new Cesium.Cartesian2(0, -50),
               fillColor: Cesium.Color.YELLOW,
               outlineColor: Cesium.Color.BLACK,
@@ -65,7 +73,9 @@ export default function CesiumViewer() {
         });
 
         // Add Earth's atmosphere
-        viewer.scene.skyAtmosphere.show = true;
+        if (viewer.scene.skyAtmosphere) {
+          viewer.scene.skyAtmosphere.show = true;
+        }
         viewer.scene.globe.enableLighting = true;
 
         viewerRef.current = viewer;
@@ -78,7 +88,7 @@ export default function CesiumViewer() {
           }
         };
       } catch (error) {
-        console.error('Error initializing Cesium:', error);
+        console.error("Error initializing Cesium:", error);
       }
     }
   }, []);
@@ -88,7 +98,7 @@ export default function CesiumViewer() {
       <div
         ref={cesiumContainer}
         className="w-full h-full rounded-lg"
-        style={{ minHeight: '400px' }}
+        style={{ minHeight: "400px" }}
       />
     </div>
   );

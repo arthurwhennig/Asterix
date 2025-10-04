@@ -6,7 +6,7 @@ import 'cesium/Build/Cesium/Widgets/widgets.css';
 
 // Set Cesium base path and access token
 if (typeof window !== 'undefined') {
-  (window as any).CESIUM_BASE_URL = '/cesium/';
+  (window as { CESIUM_BASE_URL?: string }).CESIUM_BASE_URL = "/cesium/";
   // Set the Cesium Ion access token
   Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJhOGE4ZTU1My00MWZhLTRhY2YtOWY0Zi02ZmJiMzlmMTA0NTQiLCJpZCI6MzQ2OTQ2LCJpYXQiOjE3NTk1MTg4NTN9.P1FImMkJczHJVSERLAWrrFPJOLEE9J4_8rh7qCJP-l4';
 }
@@ -48,7 +48,7 @@ interface ImpactData {
     initialWaveHeightM: number;
     waveHeights: Record<string, number>;
   };
-  damageZones: Record<string, any>;
+  damageZones: Record<string, unknown>;
 }
 
 interface DeployedAsset {
@@ -56,7 +56,7 @@ interface DeployedAsset {
   type: string;
   name: string;
   cost: number;
-  position: any;
+  position: { longitude: number; latitude: number };
   deployedAt: string;
 }
 
@@ -64,18 +64,18 @@ interface EnhancedCesiumViewerProps {
   selectedAsteroid: Asteroid | null;
   impactData: ImpactData | null;
   isSimulating: boolean;
-  mode: 'simulation' | 'defense';
+  mode: "simulation" | "defense";
   deployedAssets?: DeployedAsset[];
-  onAssetRemove?: (assetId: string) => void;
+  _onAssetRemove?: (assetId: string) => void;
 }
 
-export default function EnhancedCesiumViewer({ 
-  selectedAsteroid, 
-  impactData, 
-  isSimulating, 
+export default function EnhancedCesiumViewer({
+  selectedAsteroid,
+  impactData,
+  isSimulating,
   mode,
   deployedAssets = [],
-  onAssetRemove
+  _onAssetRemove,
 }: EnhancedCesiumViewerProps) {
   const cesiumContainer = useRef<HTMLDivElement>(null);
   const viewerRef = useRef<Cesium.Viewer | null>(null);
@@ -84,7 +84,7 @@ export default function EnhancedCesiumViewer({
   // Centralized cleanup function to clear all simulation entities
   const clearAllEntities = () => {
     if (viewerRef.current) {
-      entitiesRef.current.forEach(entity => {
+      entitiesRef.current.forEach((entity) => {
         viewerRef.current!.entities.remove(entity);
       });
       entitiesRef.current = [];
@@ -102,17 +102,17 @@ export default function EnhancedCesiumViewer({
       // This callback runs when the container is first painted or resized.
       // We only want to run the initialization logic ONCE.
       if (container && container.clientHeight > 0 && !viewerRef.current) {
-        
         try {
-          console.log('Container has size, initializing Cesium viewer...');
-          console.log('Container dimensions:', {
+          console.log("Container has size, initializing Cesium viewer...");
+          console.log("Container dimensions:", {
             width: container.clientWidth,
-            height: container.clientHeight
+            height: container.clientHeight,
           });
-        
+
           // Set the Cesium Ion access token
-          Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJhOGE4ZTU1My00MWZhLTRhY2YtOWY0Zi02ZmJiMzlmMTA0NTQiLCJpZCI6MzQ2OTQ2LCJpYXQiOjE3NTk1MTg4NTN9.P1FImMkJczHJVSERLAWrrFPJOLEE9J4_8rh7qCJP-l4';
-        
+          Cesium.Ion.defaultAccessToken =
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJhOGE4ZTU1My00MWZhLTRhY2YtOWY0Zi02ZmJiMzlmMTA0NTQiLCJpZCI6MzQ2OTQ2LCJpYXQiOjE3NTk1MTg4NTN9.P1FImMkJczHJVSERLAWrrFPJOLEE9J4_8rh7qCJP-l4";
+
           const viewer = new Cesium.Viewer(container, {
             // Your existing options
             homeButton: false,
@@ -127,23 +127,31 @@ export default function EnhancedCesiumViewer({
             infoBox: false,
             selectionIndicator: false,
             // This is still very important for crisp visuals
-            useBrowserRecommendedResolution: true, 
+            useBrowserRecommendedResolution: true,
           });
 
           viewer.scene.globe.enableLighting = true;
-          viewer.scene.skyAtmosphere.show = true;
-          
+          if (viewer.scene.skyAtmosphere) {
+            viewer.scene.skyAtmosphere.show = true;
+          }
+
           // Add error handling for imagery loading
-          viewer.scene.globe.imageryLayers.layerAdded.addEventListener((layer) => {
-            layer.errorEvent.addEventListener((error) => {
-              console.warn('Imagery layer error:', error);
-            });
-          });
+          viewer.scene.globe.imageryLayers.layerAdded.addEventListener(
+            (layer) => {
+              layer.errorEvent.addEventListener((error) => {
+                console.warn("Imagery layer error:", error);
+              });
+            }
+          );
 
           // Set initial view based on mode
-          if (mode === 'simulation') {
+          if (mode === "simulation") {
             viewer.camera.setView({
-              destination: Cesium.Cartesian3.fromDegrees(-75.59777, 40.03883, 10000000),
+              destination: Cesium.Cartesian3.fromDegrees(
+                -75.59777,
+                40.03883,
+                10000000
+              ),
             });
           } else {
             // Defense mode - solar system view
@@ -162,15 +170,19 @@ export default function EnhancedCesiumViewer({
 
           asteroidPositions.forEach((pos, index) => {
             const entity = viewer.entities.add({
-              position: Cesium.Cartesian3.fromDegrees(pos.longitude, pos.latitude, pos.height),
+              position: Cesium.Cartesian3.fromDegrees(
+                pos.longitude,
+                pos.latitude,
+                pos.height
+              ),
               billboard: {
-                image: '/asteroid-icon.svg',
+                image: "/asteroid-icon.svg",
                 scale: 0.5,
                 verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
               },
               label: {
                 text: `Asteroid ${index + 1}`,
-                font: '12pt sans-serif',
+                font: "12pt sans-serif",
                 pixelOffset: new Cesium.Cartesian2(0, -50),
                 fillColor: Cesium.Color.YELLOW,
                 outlineColor: Cesium.Color.BLACK,
@@ -182,18 +194,17 @@ export default function EnhancedCesiumViewer({
           });
 
           viewerRef.current = viewer; // Save the viewer instance
-          
+
           // Once the viewer is created, we don't need the observer anymore
           resizeObserver.disconnect();
-          console.log('Cesium viewer initialized and observer disconnected.');
-
+          console.log("Cesium viewer initialized and observer disconnected.");
         } catch (error) {
-          console.error('Error initializing Cesium:', error);
-          console.error('Error details:', {
+          console.error("Error initializing Cesium:", error);
+          console.error("Error details:", {
             message: error.message,
             stack: error.stack,
             container: container,
-            cesiumAvailable: typeof Cesium !== 'undefined'
+            cesiumAvailable: typeof Cesium !== "undefined",
           });
         }
       }
@@ -210,10 +221,10 @@ export default function EnhancedCesiumViewer({
         viewerRef.current = null;
       }
     };
-    
+
     // We remove all dependencies from the array. This hook should run
     // only once when the component mounts.
-  }, []); // Empty dependency array - runs only once on mount
+  }, [mode]); // Include mode dependency
 
   // Update visualization when asteroid is selected
   useEffect(() => {
@@ -225,14 +236,16 @@ export default function EnhancedCesiumViewer({
       const asteroidEntity = viewerRef.current.entities.add({
         position: Cesium.Cartesian3.fromDegrees(-75.59777, 40.03883, 1000000),
         billboard: {
-          image: '/asteroid-icon.svg',
+          image: "/asteroid-icon.svg",
           scale: Math.max(0.3, Math.min(2.0, selectedAsteroid.diameter * 0.5)),
           verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
-          color: selectedAsteroid.isHazardous ? Cesium.Color.RED : Cesium.Color.YELLOW,
+          color: selectedAsteroid.isHazardous
+            ? Cesium.Color.RED
+            : Cesium.Color.YELLOW,
         },
         label: {
           text: selectedAsteroid.name,
-          font: '14pt sans-serif',
+          font: "14pt sans-serif",
           pixelOffset: new Cesium.Cartesian2(0, -60),
           fillColor: Cesium.Color.WHITE,
           outlineColor: Cesium.Color.BLACK,
@@ -264,14 +277,18 @@ export default function EnhancedCesiumViewer({
     // The selection hook has already cleared the board.
 
     if (viewerRef.current && impactData) {
-      const impactPosition = Cesium.Cartesian3.fromDegrees(-75.59777, 40.03883, 0);
+      const impactPosition = Cesium.Cartesian3.fromDegrees(
+        -75.59777,
+        40.03883,
+        0
+      );
 
       // Add crater
       const craterEntity = viewerRef.current.entities.add({
         position: impactPosition,
         ellipse: {
-          semiMajorAxis: impactData.crater.diameterKm * 1000 / 2,
-          semiMinorAxis: impactData.crater.diameterKm * 1000 / 2,
+          semiMajorAxis: (impactData.crater.diameterKm * 1000) / 2,
+          semiMinorAxis: (impactData.crater.diameterKm * 1000) / 2,
           material: Cesium.Color.GRAY.withAlpha(0.7),
           height: 0,
           extrudedHeight: -impactData.crater.depthKm * 1000,
@@ -280,42 +297,44 @@ export default function EnhancedCesiumViewer({
       entitiesRef.current.push(craterEntity);
 
       // Add airblast rings
-      Object.entries(impactData.airblast.blastRadiiKm).forEach(([psi, radiusKm], index) => {
-        const colors = [
-          Cesium.Color.YELLOW.withAlpha(0.3),
-          Cesium.Color.ORANGE.withAlpha(0.3),
-          Cesium.Color.RED.withAlpha(0.3),
-          Cesium.Color.PURPLE.withAlpha(0.3),
-        ];
-        
-        const ringEntity = viewerRef.current!.entities.add({
-          position: impactPosition,
-          ellipse: {
-            semiMajorAxis: radiusKm * 1000,
-            semiMinorAxis: radiusKm * 1000,
-            material: colors[index % colors.length],
-            height: 0,
-            outline: true,
-            outlineColor: colors[index % colors.length],
-          },
-          label: {
-            text: `${psi} PSI`,
-            font: '10pt sans-serif',
-            pixelOffset: new Cesium.Cartesian2(0, -30),
-            fillColor: Cesium.Color.WHITE,
-            outlineColor: Cesium.Color.BLACK,
-            outlineWidth: 1,
-            style: Cesium.LabelStyle.FILL_AND_OUTLINE,
-          },
-        });
-        entitiesRef.current.push(ringEntity);
-      });
+      Object.entries(impactData.airblast.blastRadiiKm).forEach(
+        ([psi, radiusKm], index) => {
+          const colors = [
+            Cesium.Color.YELLOW.withAlpha(0.3),
+            Cesium.Color.ORANGE.withAlpha(0.3),
+            Cesium.Color.RED.withAlpha(0.3),
+            Cesium.Color.PURPLE.withAlpha(0.3),
+          ];
+
+          const ringEntity = viewerRef.current!.entities.add({
+            position: impactPosition,
+            ellipse: {
+              semiMajorAxis: radiusKm * 1000,
+              semiMinorAxis: radiusKm * 1000,
+              material: colors[index % colors.length],
+              height: 0,
+              outline: true,
+              outlineColor: colors[index % colors.length],
+            },
+            label: {
+              text: `${psi} PSI`,
+              font: "10pt sans-serif",
+              pixelOffset: new Cesium.Cartesian2(0, -30),
+              fillColor: Cesium.Color.WHITE,
+              outlineColor: Cesium.Color.BLACK,
+              outlineWidth: 1,
+              style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+            },
+          });
+          entitiesRef.current.push(ringEntity);
+        }
+      );
 
       // Add fireball
       const fireballEntity = viewerRef.current.entities.add({
         position: impactPosition,
         billboard: {
-          image: '/fireball-icon.svg',
+          image: "/fireball-icon.svg",
           scale: impactData.airblast.fireballRadiusKm * 100,
           verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
           color: Cesium.Color.ORANGE.withAlpha(0.8),
@@ -336,7 +355,7 @@ export default function EnhancedCesiumViewer({
         },
         label: {
           text: `Thermal Radiation`,
-          font: '10pt sans-serif',
+          font: "10pt sans-serif",
           pixelOffset: new Cesium.Cartesian2(0, -30),
           fillColor: Cesium.Color.WHITE,
           outlineColor: Cesium.Color.BLACK,
@@ -351,7 +370,7 @@ export default function EnhancedCesiumViewer({
   // Handle mode changes - only update camera if mode actually changed
   useEffect(() => {
     if (viewerRef.current) {
-      if (mode === 'defense') {
+      if (mode === "defense") {
         // Switch to solar system view for defense mode
         viewerRef.current.camera.setView({
           destination: Cesium.Cartesian3.fromDegrees(0, 0, 50000000),
@@ -359,7 +378,11 @@ export default function EnhancedCesiumViewer({
       } else {
         // Switch back to Earth view for simulation mode
         viewerRef.current.camera.setView({
-          destination: Cesium.Cartesian3.fromDegrees(-75.59777, 40.03883, 10000000),
+          destination: Cesium.Cartesian3.fromDegrees(
+            -75.59777,
+            40.03883,
+            10000000
+          ),
         });
       }
     }
@@ -367,10 +390,10 @@ export default function EnhancedCesiumViewer({
 
   // Handle deployed assets visualization
   useEffect(() => {
-    if (viewerRef.current && mode === 'defense') {
+    if (viewerRef.current && mode === "defense") {
       // Clear existing asset entities
-      entitiesRef.current.forEach(entity => {
-        if (entity.name && entity.name.startsWith('asset_')) {
+      entitiesRef.current.forEach((entity) => {
+        if (entity.name && entity.name.startsWith("asset_")) {
           viewerRef.current!.entities.remove(entity);
         }
       });
@@ -393,7 +416,7 @@ export default function EnhancedCesiumViewer({
           },
           label: {
             text: asset.name,
-            font: '12pt sans-serif',
+            font: "12pt sans-serif",
             pixelOffset: new Cesium.Cartesian2(0, -50),
             fillColor: Cesium.Color.WHITE,
             outlineColor: Cesium.Color.BLACK,
@@ -410,20 +433,20 @@ export default function EnhancedCesiumViewer({
   const getAssetIcon = (assetType: string) => {
     // Return appropriate icon based on asset type
     switch (assetType) {
-      case 'kinetic_impactor':
-        return '/kinetic-impactor-icon.svg';
-      case 'laser_ablation':
-        return '/laser-icon.svg';
-      case 'gravity_tractor':
-        return '/gravity-tractor-icon.svg';
-      case 'nuclear_device':
-        return '/nuclear-icon.svg';
-      case 'solar_sail':
-        return '/solar-sail-icon.svg';
-      case 'mass_driver':
-        return '/mass-driver-icon.svg';
+      case "kinetic_impactor":
+        return "/kinetic-impactor-icon.svg";
+      case "laser_ablation":
+        return "/laser-icon.svg";
+      case "gravity_tractor":
+        return "/gravity-tractor-icon.svg";
+      case "nuclear_device":
+        return "/nuclear-icon.svg";
+      case "solar_sail":
+        return "/solar-sail-icon.svg";
+      case "mass_driver":
+        return "/mass-driver-icon.svg";
       default:
-        return '/asteroid-icon.svg';
+        return "/asteroid-icon.svg";
     }
   };
 
@@ -434,22 +457,24 @@ export default function EnhancedCesiumViewer({
         ref={cesiumContainer}
         className="absolute inset-0 w-full h-full"
         style={{
-          width: '100%',
-          height: '100%',
-          minWidth: '100%',
-          minHeight: '100%'
+          width: "100%",
+          height: "100%",
+          minWidth: "100%",
+          minHeight: "100%",
         }}
       />
-      
+
       {/* Overlay for mode-specific UI elements */}
-      {mode === 'defense' && (
+      {mode === "defense" && (
         <div className="absolute top-4 left-4 bg-gray-800 bg-opacity-90 rounded-lg p-3 z-10">
           <h3 className="text-white font-semibold mb-2">Defense Mode</h3>
-          <p className="text-gray-300 text-sm">Strategic view for asset deployment</p>
+          <p className="text-gray-300 text-sm">
+            Strategic view for asset deployment
+          </p>
         </div>
       )}
-      
-      {mode === 'simulation' && isSimulating && (
+
+      {mode === "simulation" && isSimulating && (
         <div className="absolute top-4 right-4 bg-red-800 bg-opacity-90 rounded-lg p-3 z-10">
           <h3 className="text-white font-semibold mb-2">Simulation Running</h3>
           <p className="text-gray-300 text-sm">Impact sequence in progress</p>
